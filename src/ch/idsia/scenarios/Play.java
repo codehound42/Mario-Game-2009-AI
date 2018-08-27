@@ -7,6 +7,8 @@ import ch.idsia.ai.tasks.ProgressTask;
 import ch.idsia.ai.tasks.Task;
 import ch.idsia.tools.CmdLineOptions;
 import ch.idsia.tools.EvaluationOptions;
+import competition.cig.robinbaumgarten.AStarAgent;
+import competition.cig.tickbased.TickBasedAStarAgent;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,7 +19,10 @@ import ch.idsia.tools.EvaluationOptions;
 public class Play {
 
     public static void main(String[] args) {
-    	Agent controller = new HumanKeyboardAgent();
+//    	Agent controller = new HumanKeyboardAgent(); // Standard agent
+    	Agent controller = new TickBasedAStarAgent(); // my agent
+//    	Agent controller = new AStarAgent(); // Robin Baumgarten's agent
+    	
         if (args.length > 0) {
             controller = AgentsPool.load (args[0]);
             AgentsPool.addAgent(controller);

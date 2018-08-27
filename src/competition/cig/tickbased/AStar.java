@@ -145,8 +145,10 @@ public class AStar {
 		actions.add(createAction(true, false, false, false, false));
 		actions.add(createAction(false, true, false, true, false));
 		actions.add(createAction(true, false, false, true, false));
-//		actions.add(createAction(false, true, false, false, true));
-//		actions.add(createAction(false, true, false, true, true));
+		
+		// With speed keys enabled
+		actions.add(createAction(false, true, false, false, true));
+		actions.add(createAction(false, true, false, true, true));
 		
 		return actions;
 	}

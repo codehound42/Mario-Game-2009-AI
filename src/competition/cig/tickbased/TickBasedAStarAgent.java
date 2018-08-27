@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.mario.engine.sprites.Mario;
 import ch.idsia.mario.environments.Environment;
 
 public class TickBasedAStarAgent implements Agent {
