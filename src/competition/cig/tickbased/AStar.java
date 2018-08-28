@@ -16,19 +16,18 @@ public class AStar {
 
 	public boolean finishedNewRun = true;
 	public WorldSimulater worldSimulater;
-	int maxRightSeenSoFar;
+	public SearchNode start, goal;
 	
 	public AStar(WorldSimulater worldSimulater) {
 		this.worldSimulater = worldSimulater;
+		start = worldSimulater.initialSearchNode;
+		goal = worldSimulater.goalSearchNode;
 	}
 
 	public List<boolean[]> runAStar(long startTime) {
 //		long startTime = System.currentTimeMillis();
 		finishedNewRun = false;
 		
-		SearchNode start = worldSimulater.initialSearchNode;
-		SearchNode goal = worldSimulater.goalSearchNode;
-		maxRightSeenSoFar = (int) goal.x;
 		SearchNode currentBest = start;
 		
 		// Set of nodes already explored
@@ -46,15 +45,12 @@ public class AStar {
 		int timeTaken = (int) (System.currentTimeMillis() - startTime);
 		System.out.println("Time taken before search starts:" + timeTaken);
 		
+		int numRunThroughsAllowed = 1000; // For debugging purposes
 		// Continue exploring as long as there are states in the state space, which have not been visited, or until goal is reached
-		while (!frontier.isEmpty() && timeTaken < TickBasedAStarAgent.MAX_ALLOWED_RUN_TIME) {
+		while (!frontier.isEmpty() && numRunThroughsAllowed-- > 0) {// timeTaken < TickBasedAStarAgent.MAX_ALLOWED_RUN_TIME) {
 			SearchNode current = frontier.remove();
 			//frontierMap.remove(current.hashCode());
 			
-//			if (((Node)current.state).x > 187.6) {
-//				System.out.println("x > 187.6");
-//			}
-
 			// If goal is reached return solution path
 			if (goalTest(current)) {
 				finishedNewRun = true;
@@ -81,9 +77,10 @@ public class AStar {
 					insertChildNode(child, current, tentativeGScore, goal, frontier, frontierMap);
 				//} else if (frontierMap.containsKey(child.hashCode()) && frontierMap.get(child.hashCode()).gScore > tentativeGScore) {
 				} else if (frontier.contains(child)) {
-					if (frontier.stream().filter(e -> e.equals(child)).findFirst().get().gScore > tentativeGScore) {
+					SearchNode sn = frontier.stream().filter(e -> e.equals(child)).findFirst().get();
+					if (sn.gScore > tentativeGScore) {
 						// the path the child node gives rise to is better than the original node (and corresponding path) so add child node instead
-						frontier.remove(child);
+						frontier.remove(sn);
 						//frontierMap.remove(child.hashCode());
 						insertChildNode(child, current, tentativeGScore, goal, frontier, frontierMap);
 					}
@@ -170,10 +167,13 @@ public class AStar {
 		return action;
 	}
 
+	/**
+	 * Note: Make sure cloning is done correctly (should all internal fields also be cloned themselves?)
+	 * @param parent
+	 * @param action
+	 * @return new node with world state after input action has been applied to the parent node
+	 */
 	public SearchNode childNode(SearchNode parent, boolean[] action) {
-		// TODO dont make more levelscenes. Instead manipulate the tentativeLevelscene by taking back-ups and advancing it in time.
-		// Clone the levelScene and update it by executing the given action
-		// TODO make sure cloning is done correctly (should all internal fields also be cloned themselves?)
 		LevelScene levelScene = new LevelScene(parent.levelScene);
 		worldSimulater.advanceWorldState(levelScene, action);
 		
@@ -192,8 +192,9 @@ public class AStar {
 		float distToRightSideOfScreenTilePrecision = goal.x - searchNode.x;
 		float distToRightSideOfScreenPixelPrecision = distToRightSideOfScreenTilePrecision * WorldSimulater.BLOCK_SIZE;
 		
+		float velocityThreadHold = 0.5f;
 		float marioVelocity = searchNode.levelScene.mario.xa;
-		if (marioVelocity < 0.5) marioVelocity = 0.5f;
+		if (marioVelocity < velocityThreadHold) marioVelocity = velocityThreadHold;
 		
 		double numTicksToReachGoal = distToRightSideOfScreenPixelPrecision / marioVelocity;
 		return numTicksToReachGoal;
@@ -212,13 +213,8 @@ public class AStar {
 //	}
 
 	public boolean goalTest(SearchNode node) {
-		float distToRightSideOfScreen = node.x - maxRightSeenSoFar;
-		if (distToRightSideOfScreen >= 0) {
-			//maxRightSeenSoFar += node.levelScene.mario.x += WorldSimulater.SCREEN_WIDTH / 2;
-			//maxRightSeenSoFar += distToRightSideOfScreen;
-			return true;
-		}
-		return false;
+		float distToRightSideOfScreen = node.x - goal.x;
+		return distToRightSideOfScreen >= 0;
 	}
 
 }

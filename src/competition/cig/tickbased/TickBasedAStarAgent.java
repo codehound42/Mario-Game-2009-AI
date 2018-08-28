@@ -8,16 +8,18 @@ import ch.idsia.mario.environments.Environment;
 
 public class TickBasedAStarAgent implements Agent {
 	private String name = "Tick based";
-	private boolean[] action = new boolean[Environment.numberOfButtons];;
+	private final boolean[] DEFAULT_ACTION = {false, false, false, false, false};
+	private boolean[] action = new boolean[Environment.numberOfButtons];
 	List<boolean[]> plan = new ArrayList<boolean[]>();
 	WorldSimulater worldSimulater;
 	AStar aStar;
 	boolean doneSettingUp;
 	
 	private static final int NUM_TICKS_PLAN_AHEAD = 2;
-	private static final int NUM_TICKS_BEFORE_REPLANNING = 2;
-	public static final int MAX_ALLOWED_RUN_TIME = 100;
+	private static final int NUM_TICKS_BEFORE_REPLANNING = 0;
 	private int ticksBeforeReplanning = NUM_TICKS_BEFORE_REPLANNING;
+	
+	public static final int MAX_ALLOWED_RUN_TIME = 100;
 
 	public TickBasedAStarAgent() {
 		reset();
@@ -31,7 +33,7 @@ public class TickBasedAStarAgent implements Agent {
 		// Default action
 		//action[Mario.KEY_SPEED] = action[Mario.KEY_JUMP] = observation.mayMarioJump() || !observation.isMarioOnGround();
 		//action[Mario.KEY_RIGHT] = true;
-		if (!doneSettingUp) return action;
+		if (!doneSettingUp) return DEFAULT_ACTION;
 		
 		long startTime = System.currentTimeMillis();
 		worldSimulater.updateLevel(observation);
@@ -43,12 +45,13 @@ public class TickBasedAStarAgent implements Agent {
 		}
 		
 		if (plan == null || plan.size() == 0) {
-	        return action; // empty action
+	        return DEFAULT_ACTION; // empty action
 		}
 		
 		ticksBeforeReplanning--;
+		action = plan.remove(0);
 		worldSimulater.advanceWorldState(worldSimulater.worldScene, action);
-		return plan.remove(0);
+		return action;
 	}
 	
 	public void reset() {
