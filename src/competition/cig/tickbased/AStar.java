@@ -16,8 +16,6 @@ public class AStar {
 
 	public boolean finishedNewRun = true;
 	public WorldSimulater worldSimulater;
-	private static final int MAX_RUN_THROUGHS_ALLOWED = 100;
-	private int runThroughsAllowed = MAX_RUN_THROUGHS_ALLOWED;
 	int maxRightSeenSoFar;
 	
 	public AStar(WorldSimulater worldSimulater) {
@@ -46,9 +44,10 @@ public class AStar {
 		start.fScore = heuristicFunction(start, goal);
 		
 		int timeTaken = (int) (System.currentTimeMillis() - startTime);
+		System.out.println("Time taken before search starts:" + timeTaken);
 		
 		// Continue exploring as long as there are states in the state space, which have not been visited, or until goal is reached
-		while (!frontier.isEmpty() && (runThroughsAllowed-- > 0)) { //(timeTaken < problem.MAX_ALLOWED_RUN_TIME)) {
+		while (!frontier.isEmpty() && timeTaken < TickBasedAStarAgent.MAX_ALLOWED_RUN_TIME) {
 			SearchNode current = frontier.remove();
 			//frontierMap.remove(current.hashCode());
 			
@@ -92,14 +91,13 @@ public class AStar {
 			}
 			
 			timeTaken = (int) (System.currentTimeMillis() - startTime);
-			//System.out.println(timeTaken);
+			//System.out.println("Time taken when search ends:" + timeTaken);
 			System.out.println(current.toString());
 		}
 		
 		// No solution exists or no solution was found in the given time.
 		// Return the best route found so far.
 		finishedNewRun = true;
-		runThroughsAllowed = MAX_RUN_THROUGHS_ALLOWED;
 		System.out.println("=== END OF A* SEARCH ===");
 		return reconstructPath(currentBest);
 	}

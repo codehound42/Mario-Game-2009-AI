@@ -16,6 +16,7 @@ public class TickBasedAStarAgent implements Agent {
 	
 	private static final int NUM_TICKS_PLAN_AHEAD = 2;
 	private static final int NUM_TICKS_BEFORE_REPLANNING = 2;
+	public static final int MAX_ALLOWED_RUN_TIME = 100;
 	private int ticksBeforeReplanning = NUM_TICKS_BEFORE_REPLANNING;
 
 	public TickBasedAStarAgent() {
