@@ -51,7 +51,13 @@ public class Sprite
     public SpriteTemplate spriteTemplate;
     
     public boolean hasFacingBeenSet = false; // Custom
-
+    
+//    public Sprite clone(Sprite sprite) {
+//    	Sprite newSprite = new Sprite();
+//    	newSprite.spriteTemplate = sprite.spriteTemplate;
+//    	return newSprite;
+//    }
+    
     public void move()
     {
         x+=xa;

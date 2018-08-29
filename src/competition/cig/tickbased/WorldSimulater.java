@@ -32,6 +32,7 @@ public class WorldSimulater {
 	public WorldSimulater() {
 		LevelScene levelScene = new LevelScene();
 		worldScene = tentativeScene = levelScene;
+		levelScene.tick();
 		
 		initialSearchNode = new SearchNode(null, null, levelScene, 0);
 		goalSearchNode = new SearchNode(null, null, levelScene, 0);
@@ -49,9 +50,17 @@ public class WorldSimulater {
 		
 		Mario mario = worldScene.mario;
 		
+		System.out.println("World State Mario coords: (" + worldScene.mario.x + ", " + worldScene.mario.y + ")");
+		System.out.println("Observed Mario coords: (" + marioPosition[0] + ", " + marioPosition[1] + ")");
+		if (worldScene.mario.x != marioPosition[0] || worldScene.mario.y != marioPosition[1]) {
+			System.out.println("INACCURATE!");
+//			System.out.println("World State Mario coords: (" + worldScene.mario.x + ", " + worldScene.mario.y + ")");
+//			System.out.println("Observed Mario coords: (" + marioPosition[0] + ", " + marioPosition[1] + ")");
+		}
+		
 		// Update mario in world state to match observed mario position
-		worldScene.mario.x = marioPosition[0];
-		worldScene.mario.y = marioPosition[1];
+//		worldScene.mario.x = marioPosition[0];
+//		worldScene.mario.y = marioPosition[1];
 		
 		int marioXPos = (int) mario.x / BLOCK_SIZE; // block precision
 		int marioYPos = (int) mario.y / BLOCK_SIZE; // block precision

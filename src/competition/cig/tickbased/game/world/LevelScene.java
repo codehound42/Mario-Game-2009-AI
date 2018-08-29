@@ -119,8 +119,8 @@ public class LevelScene implements SpriteContext
 //        	if (sprite == mario) {
 //        		spritesArrayClone.add(this.mario);
 //        	} else {
-//        		Sprite s = new Sprite(sprite);
-//        		s.world = this;
+//        		Sprite s = sprite.clone(sprite);
+//        		//s.world = this;
 //        		spritesArrayClone.add(s);
 //        	}
 //        }

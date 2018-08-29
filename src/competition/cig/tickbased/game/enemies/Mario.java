@@ -119,12 +119,9 @@ public class Mario extends Sprite {
 		
 		keys = mario.keys;
 		cheatKeys = mario.cheatKeys.clone();
-		x = mario.x;
-		y = mario.y;
-
+		
 		facing = mario.facing;
 		//setLarge(Mario.large, Mario.fire);
-		
 		
 		runTime = mario.runTime;
 		wasOnGround = mario.wasOnGround;
@@ -149,8 +146,14 @@ public class Mario extends Sprite {
 		carried = mario.carried;
 		
 		// Sprite fields
+		x = mario.x;
+		y = mario.y;
+		xa = mario.xa;
+		ya = mario.ya;
 		mapX = mario.mapX;
 		mapY = mario.mapY;
+		// Copy rest of Sprite class fields?
+		
 		
 	}
 
@@ -335,9 +338,10 @@ public class Mario extends Sprite {
 
 		mayJump = (onGround || sliding) && !keys[KEY_JUMP];
 		
-		if (mayJump) {
-			System.out.println("may jump");
-		}
+		// TODO Note: For debugging purposes
+//		if (mayJump) {
+//			System.out.println("may jump");
+//		}
 
 		xFlipPic = facing == -1;
 

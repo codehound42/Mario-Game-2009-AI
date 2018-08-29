@@ -45,7 +45,7 @@ public class AStar {
 		int timeTaken = (int) (System.currentTimeMillis() - startTime);
 		System.out.println("Time taken before search starts:" + timeTaken);
 		
-		int numRunThroughsAllowed = 1000; // For debugging purposes
+		int numRunThroughsAllowed = 100; // For debugging purposes
 		// Continue exploring as long as there are states in the state space, which have not been visited, or until goal is reached
 		while (!frontier.isEmpty() && numRunThroughsAllowed-- > 0) {// timeTaken < TickBasedAStarAgent.MAX_ALLOWED_RUN_TIME) {
 			SearchNode current = frontier.remove();
@@ -89,7 +89,7 @@ public class AStar {
 			
 			timeTaken = (int) (System.currentTimeMillis() - startTime);
 			//System.out.println("Time taken when search ends:" + timeTaken);
-			System.out.println(current.toString());
+			//System.out.println(current.toString());
 		}
 		
 		// No solution exists or no solution was found in the given time.
